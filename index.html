@@ -1058,7 +1058,26 @@ button:active,
   }
   .camelia-gallery-slide img{border-radius:20px}
 }
-</style></head>
+</style>
+<style id="force-no-door">
+#loadingScreen, #door, #pinkDoor, #doorScreen, #welcomeScreen,
+.loading-screen, .loadingScreen, .door, .pink-door, .door-screen,
+.door-scene, .door-copy, .door-wrap, .door-container, .inside-welcome,
+[class*="doorScene"], [class*="pinkDoor"] {
+  display:none !important;
+  visibility:hidden !important;
+  opacity:0 !important;
+  pointer-events:none !important;
+}
+html, body {
+  overflow:auto !important;
+}
+body.loading-blur > *:not(#loadingScreen),
+body.door-loading-active > *:not(#loadingScreen) {
+  filter:none !important;
+}
+</style>
+</head>
 <body>
 
 
@@ -2678,6 +2697,35 @@ document.addEventListener('DOMContentLoaded',function(){
   const w=document.getElementById('welcomeSweetie');
   if(w) w.remove();
 });
+</script>
+<script id="force-no-door-js">
+(function(){
+  function removeDoor(){
+    const selectors=[
+      '#loadingScreen','#door','#pinkDoor','#doorScreen','#welcomeScreen',
+      '.loading-screen','.loadingScreen','.door','.pink-door','.door-screen',
+      '.door-scene','.door-copy','.door-wrap','.door-container','.inside-welcome'
+    ];
+    selectors.forEach(s=>{
+      document.querySelectorAll(s).forEach(el=>el.remove());
+    });
+    if(document.body){
+      document.body.classList.remove('loading-blur','door-loading-active','loading','locked');
+      document.body.style.overflow='auto';
+      document.body.style.filter='none';
+    }
+    document.documentElement.classList.remove('loading-blur','door-loading-active','loading','locked');
+    document.documentElement.style.overflow='auto';
+  }
+  removeDoor();
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded', removeDoor);
+  }
+  window.addEventListener('load', removeDoor);
+  setTimeout(removeDoor, 0);
+  setTimeout(removeDoor, 100);
+  setTimeout(removeDoor, 500);
+})();
 </script>
 </body>
 </html>
